@@ -1,5 +1,5 @@
-# React Boilerplate 3 
-## Boilerplate project written in ReactJs
+# Learn Redux
+## Redux project written in ReactJs and Redux to learn about Redux features
 * Install webpack npm install -g webpack
 * Run npm install 
 * Run webpack
