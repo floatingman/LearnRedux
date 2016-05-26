@@ -9,9 +9,25 @@ var stateDefault = {
 };
 
 var reducer = (state = stateDefault, action) => {
-  return state;
+  switch (action.type) {
+    case 'CHANGE_SEARCHTEXT':
+      return {
+        ...state,
+        searchText: action.searchText
+      };
+    default:
+      return state;
+  }
 };
 
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer,window.devToolsExtension && window.devToolsExtension());
 
 console.log('currentState', store.getState());
+
+
+store.dispatch({
+  type: 'CHANGE_SEARCHTEXT',
+  searchText: 'work'
+});
+
+console.log('searchText should be "work"', store.getState());
