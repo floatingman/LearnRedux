@@ -1,8 +1,15 @@
 var redux = require('redux');
 
 console.log('Starting redux example');
+var stateDefault = {
+  name: 'Anonymous',
+  hobbies: [],
+  movies: []
+};
 
-var reducer = (state = {name: 'Anonymous'}, action) => {
+var nextHobbyId = 1;
+var nextMovieId = 1;
+var reducer = (state = stateDefault, action) => {
 
   switch (action.type) {
     case 'CHANGE_NAME':
@@ -10,12 +17,46 @@ var reducer = (state = {name: 'Anonymous'}, action) => {
         ...state,
         name: action.name
       };
+    case 'ADD_HOBBY':
+      return {
+        ...state,
+        hobbies: [
+          ...state.hobbies,
+          {
+            id: nextHobbyId++,
+            hobby: action.hobby
+          }
+        ]
+      };
+    case 'ADD_MOVIE':
+      return {
+        ...state,
+        movies: [
+          ...state.movies,
+          {
+            id: nextMovieId++,
+            title: action.title,
+            genre: action.genre
+          }
+        ]
+      };
     default:
       return state;
   }
 };
 
-var store = redux.createStore(reducer);
+var store = redux.createStore(reducer, window.devToolsExtension && window.devToolsExtension());
+
+// subscribe to changes
+var unsubscribe = store.subscribe(() => {
+  var state = store.getState();
+
+  console.log('Name is ', state.name);
+  document.getElementById('app').innerHTML = state.name;
+
+  console.log('New state', store.getState());
+  
+});
 
 var currentState = store.getState();
 
@@ -25,4 +66,21 @@ store.dispatch({
   type: 'CHANGE_NAME',
   name: 'Daniel'
 });
-console.log('Name should be Daniel', store.getState());
+
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'Running'
+});
+
+//unsubscribe();
+
+store.dispatch({
+  type: 'CHANGE_NAME',
+  name: 'Billy'
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE',
+  title: 'Mask',
+  genre: 'Dramady'
+});

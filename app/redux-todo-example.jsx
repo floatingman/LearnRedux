@@ -22,6 +22,14 @@ var reducer = (state = stateDefault, action) => {
 
 var store = redux.createStore(reducer,window.devToolsExtension && window.devToolsExtension());
 
+// subscribe to changes
+var unsubscribe = store.subscribe(() => {
+  var state = store.getState();
+
+  console.log('SearchText is ', state.searchText);
+  document.getElementById('app').innerHTML = state.searchText;
+});
+
 console.log('currentState', store.getState());
 
 
@@ -30,4 +38,13 @@ store.dispatch({
   searchText: 'work'
 });
 
-console.log('searchText should be "work"', store.getState());
+store.dispatch({
+  type: 'CHANGE_SEARCHTEXT',
+  searchText: 'billy'
+});
+
+store.dispatch({
+  type: 'CHANGE_SEARCHTEXT',
+  searchText: 'home'
+});
+
